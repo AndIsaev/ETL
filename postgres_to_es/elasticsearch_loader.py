@@ -17,6 +17,9 @@ class ElasticSearchLoader:
 
     @backoff()
     def create_index(self, index: str) -> None:
+        """
+        Создаем индекс для Elasticsearch.
+        """
         if not self.client.indices.exists(index):
             self.client.indices.create(index=index, ignore=400, body=CINEMA_INDEX_BODY)
             logger.warning(f'{datetime.now()}\n\nиндекс {index} создан')
@@ -27,7 +30,9 @@ class ElasticSearchLoader:
         self.client.bulk(index='movies', body=self.data, refresh=True)
 
     def load_data_to_elasticsearch(self, query) -> None:
-
+        """
+        Загружаем данные пачками в Elasticsearch.
+        """
         data_json = json.dumps(query)
         load_json = json.loads(data_json)
         count = len(load_json)

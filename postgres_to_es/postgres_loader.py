@@ -26,6 +26,9 @@ class PostgresLoader:
         return f"{load_film_id[:inx]} and updated_at > '{self.state_key}' {load_film_id[inx:]}"
 
     def loader_from_postgresql(self) -> list:
+        """
+        Главный запрос на получение данных из бд
+        """
 
         full_load = f"""
             select
