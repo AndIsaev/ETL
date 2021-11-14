@@ -1,10 +1,12 @@
 import random
+
+import factory
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-import factory
-from faker import Faker
 from factory.django import DjangoModelFactory
-from ...models import Genre, Person, FilmWork, PersonFilmWork, FilmWorkGenre
+from faker import Faker
+
+from ...models import FilmWork, FilmWorkGenre, Genre, Person, PersonFilmWork
 
 data_persons = []
 data_films = []

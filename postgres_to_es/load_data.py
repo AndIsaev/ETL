@@ -1,14 +1,13 @@
-import psycopg2
 import logging
-from datetime import datetime
 from contextlib import closing
+from datetime import datetime
+import psycopg2
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 from config import dsl, es_conf
+from elasticsearch_loader import ElasticSearchLoader
 from postgres_loader import PostgresLoader
 from services import backoff
-from elasticsearch_loader import ElasticSearchLoader
-
 
 logger = logging.getLogger('LoaderStart')
 

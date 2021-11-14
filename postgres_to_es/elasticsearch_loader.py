@@ -4,7 +4,7 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 from esindex import CINEMA_INDEX_BODY
 from services import backoff
-from state import State, JsonFileStorage
+from state import JsonFileStorage, State
 
 logger = logging.getLogger('ESLoader')
 

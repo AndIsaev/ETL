@@ -1,8 +1,9 @@
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
-from rest_framework import mixins, viewsets
-from .serializers import MoviesSerializer
 from movies.models import FilmWork
+from rest_framework import mixins, viewsets
+
+from .serializers import MoviesSerializer
 
 
 class MoviesAPIView(
