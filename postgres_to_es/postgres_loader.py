@@ -1,7 +1,7 @@
 from datetime import datetime
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
-from sub_queries import main_query
+from query import main_query
 from state import JsonFileStorage, State
 
 
