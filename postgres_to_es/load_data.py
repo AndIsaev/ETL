@@ -44,8 +44,8 @@ if __name__ == '__main__':
         movies = []
         while count != 0:
             if count >= batch:
-                for j in data_from_postgres[index: index + batch]:
-                    movies.append(dict(zip(columns, j)))
+                for row in data_from_postgres[index: index + batch]:
+                    movies.append(dict(zip(columns, row)))
                     index += 1
                 count -= batch
                 ElasticSearchLoader(es_conf).load_data_to_elasticsearch(movies)
