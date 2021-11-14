@@ -17,6 +17,5 @@ main_query = """
             left join content.genre g on g.id = gfw.genre_id
             where greatest(fw.updated_at,  p.updated_at, g.updated_at) > '%s'
             group by fw.id
-            order by greatest(fw.updated_at,  max(p.updated_at), max(g.updated_at)) asc
-            limit 1234;
+            order by greatest(fw.updated_at,  max(p.updated_at), max(g.updated_at)) asc;
 """
