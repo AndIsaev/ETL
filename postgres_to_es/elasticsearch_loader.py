@@ -36,9 +36,9 @@ class ElasticSearchLoader:
         data_json = json.dumps(query)
         load_json = json.loads(data_json)
 
-        for i in load_json:
-            self.data.append({"create": {"_index": "movies", "_id": i['id']}})
-            self.data.append(i)
+        for row in load_json:
+            self.data.append({"create": {"_index": "movies", "_id": row['id']}})
+            self.data.append(row)
             self.bulk_data_to_elasticsearch()
             self.data.clear()
         State(JsonFileStorage('postgres_data.txt')).set_state(str(self.key), value=str(datetime.now()))
