@@ -20,6 +20,11 @@ def load_from_postgres(pg_conn: _connection) -> list:
 
 
 if __name__ == '__main__':
+    columns = ['id', 'title', 'description', 'imdb_rating',
+               'genre', 'director', 'actors_names', 'writers_names',
+               'actors', 'writers']
+    batch = 50
+
     @backoff()
     def query_postgres() -> list:
         with closing(psycopg2.connect(**dsl, cursor_factory=DictCursor)) as pg_conn:
@@ -28,8 +33,27 @@ if __name__ == '__main__':
         return load_pq
 
     def save_elastic() -> None:
+        """
+        Загружаем пачками данные в ElasticSearch, предварительно создаем индекс в бд.
+        """
         logger.info(f'{datetime.now()}\n\nустановлена связь с ElasticSearch. Начинаем загрузку данных')
         ElasticSearchLoader(es_conf).create_index('movies')
-        ElasticSearchLoader(es_conf).load_data_to_elasticsearch(query_postgres())
-
+        data_from_postgres = query_postgres()
+        count = len(data_from_postgres)
+        index = 0
+        movies = []
+        while count != 0:
+            if count >= batch:
+                for j in data_from_postgres[index: index + batch]:
+                    movies.append(dict(zip(columns, j)))
+                    index += 1
+                count -= batch
+                ElasticSearchLoader(es_conf).load_data_to_elasticsearch(movies)
+                movies.clear()
+            else:
+                ElasticSearchLoader(es_conf).load_data_to_elasticsearch(
+                    [dict(zip(columns, row)) for row in data_from_postgres[index: index + count]]
+                )
+                count -= count
+                movies.clear()
     save_elastic()

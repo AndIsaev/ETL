@@ -31,28 +31,15 @@ class ElasticSearchLoader:
 
     def load_data_to_elasticsearch(self, query) -> None:
         """
-        Загружаем данные пачками в Elasticsearch.
+        Загружаем данные пачками в Elasticsearch предварительно присваивая записям id.
         """
         data_json = json.dumps(query)
         load_json = json.loads(data_json)
-        count = len(load_json)
-        i = 0
 
-        while count != 0:
-            if count >= 50:
-                for j in range(i, i + 50):
-                    self.data.append({"create": {"_index": "movies", "_id": load_json[i]['id']}})
-                    self.data.append(load_json[i])
-                    i += 1
-                self.bulk_data_to_elasticsearch()
-                self.data.clear()
-                count -= 50
-            else:
-                for j in range(i, i + count):
-                    self.data.append({"create": {"_index": "movies", "_id": load_json[i]['id']}})
-                    self.data.append(load_json[i])
-                    i += 1
-                self.bulk_data_to_elasticsearch()
-                count -= count
-                self.data.clear()
+        for i in load_json:
+            self.data.append({"create": {"_index": "movies", "_id": i['id']}})
+            self.data.append(i)
+            self.bulk_data_to_elasticsearch()
+            self.data.clear()
         State(JsonFileStorage('postgres_data.txt')).set_state(str(self.key), value=str(datetime.now()))
+
