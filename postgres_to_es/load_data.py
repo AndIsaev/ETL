@@ -54,5 +54,4 @@ if __name__ == '__main__':
                     [dict(zip(columns, row)) for row in data_from_postgres[index: index + count]]
                 )
                 count -= count
-                movies.clear()
     save_elastic()
